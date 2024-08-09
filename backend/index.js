@@ -28,6 +28,10 @@ app.listen(PORT , () => {
     console.log(`server is Running at ${PORT}`)
 })
 
+app.get("/" , (req, res) => {
+    console.log("this is Home Page")
+});
+
 //import Route
 
 import authRouter from "./routes/auth.route.js"
