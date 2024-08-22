@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { MdClose } from "react-icons/md";
 import TagInput from "../../components/input/TagInput";
 import axios from "axios";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 import { toast } from "react-toastify";
 
 const AddEditNotes = ({ onclose, noteData, type ,fetch}) => {
