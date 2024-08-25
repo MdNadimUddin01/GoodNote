@@ -40,7 +40,7 @@ const SignUp = () => {
     try {
 
       const res = await axios.post(
-        "http:///localhost:4000/api/auth/signup",
+        "https://goodnote.onrender.com/api/auth/signup",
         { userName: name, email, password },
         { withCredintials: true }
       );

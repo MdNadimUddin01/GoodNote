@@ -18,7 +18,7 @@ const AddEditNotes = ({ onclose, noteData, type ,fetch}) => {
 
     try{
 
-      const res = await axios.post("http:///localhost:4000/api/note/edit/" + noteId , {title , tags , content} , {withCredentials:true});
+      const res = await axios.post("https://goodnote.onrender.com/api/note/edit/" + noteId , {title , tags , content} , {withCredentials:true});
 
       // if(res.data.success === false){
       //   toast.failure(res.data.message);

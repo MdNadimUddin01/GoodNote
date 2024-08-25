@@ -45,7 +45,7 @@ const Home = () => {
 
   const getAllnotes = async (req, res) => {
     try {
-      const res = await axios.get("http:///localhost:4000/api/note/all", {
+      const res = await axios.get("https://goodnote.onrender.com/api/note/all", {
         withCredentials: true,
       });
 
@@ -74,7 +74,7 @@ const Home = () => {
     const noteId = note._id;
     try {
       const res = await axios.delete(
-        "http:///localhost:4000/api/note/delete/" + noteId,
+        "https://goodnote.onrender.com/api/note/delete/" + noteId,
         { withCredentials: true }
       );
 
@@ -97,7 +97,7 @@ const Home = () => {
 
     try {
       const res = await axios.put(
-        "http:///localhost:4000/api/note/update-note-pinned/" + noteId,
+        "https://goodnote.onrender.com/api/note/update-note-pinned/" + noteId,
         { isPinned: !noteData.isPinned },
         { withCredentials: true }
       );
@@ -131,7 +131,7 @@ const Home = () => {
     // console.log(query);
     try {
     
-      const res = await axios.get('http://localhost:4000/api/note/search', {
+      const res = await axios.get('https://goodnote.onrender.com/api/note/search', {
         params: {
           query: query
         },

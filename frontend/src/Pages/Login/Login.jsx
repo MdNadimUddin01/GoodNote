@@ -34,7 +34,7 @@ const handleLogin = async(e) => {
   try{
     dispatch(signInStart());
 
-    const res = await axios.post("http:///localhost:4000/api/auth/login" , 
+    const res = await axios.post("https://goodnote.onrender.com/api/auth/login" , 
     {email , password} , {withCredentials:true})
 
     // if(res.data.success === false){

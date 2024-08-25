@@ -20,13 +20,22 @@ mongoose
 //middleWare
 app.use(express.json());
 app.use(cookieParser());
+const allowedOrigins = ["https://good-note-psi.vercel.app", "http://localhost:5173/"]; // Add any other domains as needed
+
 app.use(
   cors({
-    origin: true,
+    origin: function (origin, callback) {
+      if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     methods: ["POST", "GET", "DELETE", "PUT"],
     credentials: true,
   })
 );
+
 
 const PORT = process.env.PORT || 4000;
 
