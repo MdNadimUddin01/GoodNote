@@ -3,57 +3,63 @@ import PasswordIp from "../../components/input/PasswordIp";
 import { Link, useNavigate } from "react-router-dom";
 import { validateEmail } from "../../utils/helper";
 import { useDispatch } from "react-redux";
-import { signInFailure, signInStart, signInSuccess } from "../../redux/user/userSlice";
-import axios from "axios"
+import {
+  signInFailure,
+  signInStart,
+  signInSuccess,
+} from "../../redux/user/userSlice";
+import axios from "axios";
 import { toast } from "react-toastify";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error , setError] = useState("");
+  const [error, setError] = useState("");
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-const handleLogin = async(e) => {
-  e.preventDefault();
+  const handleLogin = async (e) => {
+    e.preventDefault();
 
-  if(!validateEmail(email)){
-    setError("Please Enter the valid email address");
-    return ;
-  }
+    if (!validateEmail(email)) {
+      setError("Please Enter the valid email address");
+      return;
+    }
 
-  if(!password){
-    setError("Please Enter the valid password")
-    return
-  }
+    if (!password) {
+      setError("Please Enter the valid password");
+      return;
+    }
 
-  setError("");
+    setError("");
 
-  //Login API
+    //Login API
 
-  try{
-    dispatch(signInStart());
+    try {
+      dispatch(signInStart());
 
-    const res = await axios.post("https://goodnote.onrender.com/api/auth/login" , 
-    {email , password} , {withCredentials:true})
+      const res = await axios.post(
+        "http://localhost:3000/api/auth/signin",
+        { email, password },
+        { withCredentials: true }
+      );
 
-    // if(res.data.success === false){
-    //   console.log(res.data);
-    //   toast.error(res.data.message);
-    //   dispatch(signInFailure(res.data.message));
-    // }
+      if(res.data.success === false){
+        console.log(res.data);
+        toast.error(res.data.message);
+        dispatch(signInFailure(res.data.message));
+      }
 
-    toast.success(res.data.message);
-    dispatch(signInSuccess(res.data));
-    navigate("/");
-
-  }catch(error){
-    // console.log(error);
-    toast.error(error.response.data.message);
-    dispatch(signInFailure(error.response.data.message));
-  }
-
-}
+      toast.success(res.data.message);
+      dispatch(signInSuccess(res.data));
+      navigate("/");
+    } catch (error) {
+      // console.log(error);
+      toast.error(error.message);
+      dispatch(signInFailure(error.message));
+    }
+  };
   return (
     <div className="flex items-center justify-center mt-28">
       <div className="w-96 border bg-white rounded px-7 py-10 ">
@@ -73,11 +79,7 @@ const handleLogin = async(e) => {
             onchange={(e) => setPassword(e.target.value)}
           ></PasswordIp>
 
-
-          {error && <p className="text-red-500 text-sm pb-1">{error}</p>
-
-          }
-
+          {error && <p className="text-red-500 text-sm pb-1">{error}</p>}
 
           <button
             type="submit"

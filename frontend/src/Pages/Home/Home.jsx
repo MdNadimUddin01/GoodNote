@@ -27,7 +27,7 @@ const Home = () => {
     data: null,
   });
 
-  if(currentUser === null || !currentUser){
+  if (currentUser === null || !currentUser) {
     navigate("/login");
   }
 
@@ -40,27 +40,28 @@ const Home = () => {
     }
   }, []);
 
-
-  
-
   const getAllnotes = async (req, res) => {
     try {
-      const res = await axios.get("https://goodnote.onrender.com/api/note/all", {
-        withCredentials: true,
-      });
+      const res = await axios.get(
+        "http://localhost:3000/api/note/all",
+        {
+          withCredentials: true,
+        }
+      );
 
-      // if (res.data.success === false) {
-      //   console.log(res.data);
-      //   return;
-      // }
+      // console.log(res);
+
+      if (res.data.success === false) {
+        console.log(res.data);
+        return;
+      }
 
       // console.log(res);
 
       setAllNotes(res.data.notes);
     } catch (error) {
-      // console.log(error);
-      toast.error(error.response.data.message);
-
+      console.log(error);
+      toast.error(error.message);
     }
   };
 
@@ -74,21 +75,19 @@ const Home = () => {
     const noteId = note._id;
     try {
       const res = await axios.delete(
-        "https://goodnote.onrender.com/api/note/delete/" + noteId,
+        "http://localhost:3000/api/note/delete/" + noteId,
         { withCredentials: true }
       );
 
-      // if (res.success === false) {
-      //   toast.error(res.data.message);
-      // }
+      if (res.success === false) {
+        toast.error(res.data.message);
+      }
 
       toast.success(res.data.message);
 
       getAllnotes();
     } catch (error) {
-
-      toast.error(error.response.data.message);
-
+      toast.error(error.message);
     }
   };
 
@@ -97,64 +96,57 @@ const Home = () => {
 
     try {
       const res = await axios.put(
-        "https://goodnote.onrender.com/api/note/update-note-pinned/" + noteId,
+        "http://localhost:3000/api/note/update-note-pinned/" + noteId,
         { isPinned: !noteData.isPinned },
         { withCredentials: true }
       );
 
-      // if (res.data.success === false) {
-      //   toast.error(error.message);
-      //   console.log(error.message);
-      //   return;
-      // }
+      if (res.data.success === false) {
+        toast.error(error.message);
+        console.log(error.message);
+        return;
+      }
 
       allNotes[index] = res.data.isPinned;
 
       toast.success(res.data.message);
       getAllnotes();
-
     } catch (error) {
       // console.log(error.message);
       toast.error(error.response.data.message);
-
     }
   };
 
   const handleClearSearch = () => {
-
     getAllnotes();
     setIsSearch(false);
-
   };
 
   const onsearchNote = async (query) => {
     // console.log(query);
     try {
-    
-      const res = await axios.get('https://goodnote.onrender.com/api/note/search', {
-        params: {
-          query: query
-        },
-        withCredentials: true
-      });
+      const res = await axios.get(
+        "http://localhost:3000/api/note/search",
+        {
+          params: {
+            query: query,
+          },
+          withCredentials: true,
+        }
+      );
 
       // console.log(res);
 
-      // if (res.data.success === false) {
-      //   console.log(res.data.message);
-      //   toast.error(res.data.message);
-      //   return;
-      // }
-
-      
+      if (res.data.success === false) {
+        console.log(res.data.message);
+        toast.error(res.data.message);
+        return;
+      }
 
       setAllNotes(res.data.notes);
       setIsSearch(true);
-
     } catch (error) {
-
-      toast.error(error.response.data.message);
-      
+      toast.error(error.message);
     }
   };
 
@@ -170,7 +162,6 @@ const Home = () => {
       <div className="container mx-auto p-6 lg:px-16 md:px-14">
         {allNotes.length === 0 ? (
           <div className="">
-
             <EmptyCard
               imgSrc={
                 isSearch
@@ -183,7 +174,6 @@ const Home = () => {
                   : "Ready to capture your ideas ? Click the 'Add' button to start noting down your thoughts , inspiration and reminders . Let's go started"
               }
             ></EmptyCard>
-
           </div>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mt-8 max-md:m-5 ">
@@ -236,7 +226,9 @@ const Home = () => {
           }
           noteData={openEditModel.data}
           type={openEditModel.type}
-          fetch={() => {getAllnotes()}}
+          fetch={() => {
+            getAllnotes();
+          }}
         ></AddEditNotes>
       </Modal>
     </>

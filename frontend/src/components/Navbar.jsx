@@ -3,39 +3,42 @@ import SearchBar from "./SearchBar/SearchBar";
 import ProfileInfo from "./Cards/ProfileInfo";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { signOutFailure, signOutStart, signOutSuccess } from "../redux/user/userSlice";
+import {
+  signOutFailure,
+  signOutStart,
+  signOutSuccess,
+} from "../redux/user/userSlice";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const Navbar = ({userInfo , handleClearSearch , onsearchNote}) => {
-  
+const Navbar = ({ userInfo, handleClearSearch, onsearchNote }) => {
   const [searchquery, setSearchquery] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleSearch = () => {
-
-    if(searchquery){
+    if (searchquery) {
       onsearchNote(searchquery);
     }
-    
-  }
+  };
 
   const onClearSearch = () => {
     setSearchquery("");
     handleClearSearch();
-  }
+  };
 
-  const onLogout = async() => {
-
-    try{
+  const onLogout = async () => {
+    try {
       dispatch(signOutStart());
 
-      const res = await axios.get("https://goodnote.onrender.com/api/auth/signout" , {withCredentials: true,})
+      const res = await axios.get("http://localhost:3000/api/auth/signout", {
+        withCredentials: true,
+      });
 
-      if(res.data.success === false){
+      if (res.data.success === false) {
         dispatch(signOutFailure(res.data.message));
         toast.error(res.data.message);
+        return;
       }
 
       // console.log("success");
@@ -43,10 +46,7 @@ const Navbar = ({userInfo , handleClearSearch , onsearchNote}) => {
       toast.success(res.data.message);
 
       navigate("/login");
-
-      
-      
-    }catch(error){
+    } catch (error) {
       console.log(error);
       toast.error(error.message);
       dispatch(signOutFailure(error.message));

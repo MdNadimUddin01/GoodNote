@@ -44,7 +44,7 @@ export const login = async(req , res , next) => {
   
 
   try{
-    console.log("Hello")
+    // console.log("Hello")
     const validUser = await User.findOne({email:email});
 
     if(!validUser){

@@ -76,6 +76,7 @@ export const editNote = async (req, res, next) => {
 
 export const getAllNotes = async (req, res, next) => {
   const userId = req.user.id;
+  console.log("HELLO");
 
   try {
     const notes = await Note.find({ userId }).sort({ isPinned: -1 });

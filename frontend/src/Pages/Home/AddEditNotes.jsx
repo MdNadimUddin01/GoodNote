@@ -5,68 +5,63 @@ import axios from "axios";
 // import { toast } from "react-toastify";
 import { toast } from "react-toastify";
 
-const AddEditNotes = ({ onclose, noteData, type ,fetch}) => {
-
+const AddEditNotes = ({ onclose, noteData, type, fetch }) => {
   const [title, setTitle] = useState(noteData?.title || "");
   const [content, setContent] = useState(noteData?.content || "");
   const [tags, setTags] = useState(noteData?.tags || []);
   const [error, setError] = useState("");
 
   const editNote = async () => {
-
     const noteId = noteData._id;
 
-    try{
+    try {
+      const res = await axios.post(
+        "http://localhost:3000/api/note/edit/" + noteId,
+        { title, tags, content },
+        { withCredentials: true }
+      );
 
-      const res = await axios.post("https://goodnote.onrender.com/api/note/edit/" + noteId , {title , tags , content} , {withCredentials:true});
+      if (res.data.success === false) {
+        toast.failure(res.data.message);
+        // toast.error(res.data.message);
+        console.log(res.data.message);
+        setError(res.data.message);
+        return;
+      }
 
-      // if(res.data.success === false){
-      //   toast.failure(res.data.message);
-      //   // toast.error(res.data.message);
-      //   console.log(res.data.message);
-      //   setError(res.data.message);
-      //   return;
-      // }
-
-      
       fetch();
 
       toast.success(res.data.message);
       // toast.success(res.data.message);
 
       onclose();
-
-    }catch(error){
-
-      toast.error(error.response.data.message);
+    } catch (error) {
+      toast.error(error.message);
       // console.log(error.message);
-      setError(error.response.data.message);
-      
+      setError(error.message);
     }
   };
 
   const addNewNote = async () => {
     try {
       const res = await axios.post(
-        "http:///localhost:4000/api/note/add",
+        "http://localhost:3000/api/note/add",
         { title, content, tags },
         { withCredentials: true }
       );
 
-      // if (res.data.success === false) {
-      //   console.log(res.data.error.message);
-      //   setError(res.data.error.message);
-      // }
+      if (res.data.success === false) {
+        console.log(res.data.error.message);
+        setError(res.data.error.message);
+      }
 
       toast.success(res.data.message);
 
       fetch();
       onclose();
     } catch (error) {
-
-      toast.error(error.response.data.message);
-      setError(error.response.data.message);
-      
+      toast.error(error.message);
+      setError(error.message);
     }
   };
   const handleAddNote = () => {

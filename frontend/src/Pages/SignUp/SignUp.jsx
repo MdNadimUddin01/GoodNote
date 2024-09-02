@@ -32,33 +32,30 @@ const SignUp = () => {
 
     setError("");
 
-    
-
     //signUp API
 
-
     try {
-
       const res = await axios.post(
-        "https://goodnote.onrender.com/api/auth/signup",
+        "http://localhost:3000/api/auth/signup",
         { userName: name, email, password },
         { withCredintials: true }
       );
+
+      if (res.data.success === false) {
+        setError(res.data.message)
+        toast.error(res.data.message)
+        return
+      }
 
       toast.success(res.data.message);
 
       setError("");
 
       navigate("/login");
-      
-    }catch (error) {
-
-
-      toast.error(error.response.data.message);
-      setError(error.response.data.message);
-
+    } catch (error) {
+      toast.error(error.message);
+      setError(error.message);
     }
-
   };
 
   return (
